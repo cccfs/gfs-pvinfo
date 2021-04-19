@@ -3,12 +3,12 @@ go:
   - 1.15.x
 os:
   - linux
-
-after_success:
-  -
+script:
+  - go get ./...
+  - go build -o gfs-pvinfo-$TRAVIS_OS_NAME
 
 deploy:
-- provider: releases
+  provider: releases
   token: $GITHUB_TOKEN
   name: gfs-pvinfo $TRAVIS_TAG
   file: gfs-pvinfo-$TRAVIS_OS_NAME

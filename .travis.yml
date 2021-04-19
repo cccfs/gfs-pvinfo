@@ -1,0 +1,29 @@
+language: go
+go:
+  - 1.15.x
+os:
+  - linux
+services:
+  - docker
+
+after_success:
+  -
+before_deploy: |-
+  if [ "$TRAVIS_TAG" != "" ]; then
+    IMAGE="cccfs/gfs-pvinfo:$TRAVIS_TAG"
+  else
+    IMAGE="cccfs/gfs-pvinfo:dev"
+  fi
+  docker build \
+  -t $IMAGE \
+  .
+
+deploy:
+- provider: releases
+  token: $GITHUB_TOKEN
+  name: $TRAVIS_TAG
+  file: gfs-pvinfo-$TRAVIS_OS_NAME
+  skip_cleanup: true
+  on:
+    repo: cccfs/gfs-pvinfo
+    tags: true
